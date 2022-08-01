@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="basket">
+	<select id="basketList" resultType="com.oh.dto.BasketDTO">
+		select * from basket where mid = #{mid}
+	</select>
+	<select id="basketSerch" resultType="com.oh.dto.BasketDTO">
+		select * from basket where bno = #{bno}
+	</select>
+	<insert id="basketAdd">
+		insert into basket(mid, gno, gname, bamount, bprice) values(#{mid}, #{gno}, #{gname}, #{bamount}, #{bprice})
+	</insert>
+	<update id="basketUpdate">
+		update set bamount = #{bamount}, bprice = #{bprice} where bno = #{bno}
+	</update>
+	<delete id="basketDelete">
+		delete from basket where bno = #{bno}
+	</delete>
+</mapper>

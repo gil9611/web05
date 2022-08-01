@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+	<select id="boardList" resultType="com.oh.dto.BoardDTO">
+		select * from board <include refid="search"/> order by bno desc
+	</select>
+	<sql id="search">
+		<if test="search=='btit' or search=='bname'">
+			where #{search} like CONCAT('%', #{keyword}, '%')
+		</if>
+	</sql>
+	<select id="boardView" resultType="com.oh.dto.BoardDTO">
+		select * from board where bno = #{bno}
+	</select>
+	<insert id="boardAdd">
+		insert into board(btit, bname, bnote) values(#{btit}, #{bname}, #{bnote})
+	</insert>
+	<update id="boardUpdate">
+		update board set btit = #{btit}, bnote = #{bnote} where bno = #{bno}
+	</update>
+	<delete id="boardDelete">
+		delete from board where bno = #{bno}
+	</delete>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="goods">
+	<select id="goodsList" resultType="com.oh.dto.GoodsDTO">
+		select * from goods <include refid="search"/> order by gno desc
+	</select>
+	<select id="goodsPageList" resultType="com.oh.dto.GoodsDTO">
+		select * from goods <include refid="search"/> order by gno desc limit #{startPost}, #{bnum}
+	</select>
+	<sql id="search">
+		<if test="search == 'gcategory1'">
+			where gcategory1 like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="search == 'gcategory2'">
+			where gcategory2 like CONCAT('%', #{keyword}, '%')
+		</if>
+		<if test="search == 'gcode'">
+			where gcode like CONCAT(#{keyword}, '%')
+		</if>
+	</sql>
+	<select id="goodsView" resultType="com.oh.dto.GoodsDTO">
+		select * from goods where gcode = #{gcode}
+	</select>
+	<insert id="goodsAdd">
+		insert into goods (gcode, gname, gcategory1, gcategory2, gprice, gcolor, gsize, gmeterial, gamount, gcomment, gimg) 
+		values((select * from(select concat((select cgcode from categoryCode where cglabel = #{gcategory2}), (lpad((select max(gno)+1 from goods),'6','0'))))as gcode), #{gname}, #{gcategory1}, #{gcategory2}, #{gprice}, #{gcolor}, #{gsize}, #{gmeterial}, #{gamount}, #{gcomment}, #{gimg})
+	</insert>
+	<update id="goodsUpdate">
+		update goods set gname = #{gname}, gcategory1 = #{gcategory1}, gcategory2 = #{gcategory2}, gprice = #{gprice}, gcolor = #{gcolor}, gsize = #{gsize}, gmeterial = #{gmeterial}, gamount = #{gamount}, gcomment = #{gcomment}, gimg = #{gimg}) where gno = #{gno}
+	</update>
+	<delete id="goodsDelete">
+		delete from goods where gno = #{gno}
+	</delete>
+	<select id="goodsCount" resultType="integer">
+		select count(*) from goods <include refid="search"/>
+	</select>
+</mapper>
